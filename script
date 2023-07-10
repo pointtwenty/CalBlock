@@ -1,0 +1,49 @@
+function blockCalendar() {
+  var getOtherCalendarEvents = function() {
+    var otherCalendarId = "xyz@xzy.com"; // Replace with your other calendar ID or URL
+    var otherCalendar = CalendarApp.getCalendarById(otherCalendarId);
+    var currentDate = new Date();
+    var endDate = new Date();
+    endDate.setDate(currentDate.getDate() + 28); // Set the end date 4 weeks from the current date
+    var events = otherCalendar.getEvents(currentDate, endDate); // Retrieve events for the next 4 weeks
+    return events;
+  };
+
+  var blockAvailability = function() {
+    var targetCalendarId = "abc@acb.com"; // Replace with your calendar ID or URL
+    var targetCalendar = CalendarApp.getCalendarById(targetCalendarId);
+    var events = getOtherCalendarEvents(); // Retrieve events from the other calendar
+    var newEvents = []; // Array to store only new events
+
+    // Create blocking events in the target calendar
+    for (var i = 0; i < events.length; i++) {
+      var event = events[i];
+      var existingEvent = findEventByTitleAndTimeslot(targetCalendar, "External Block", event.getStartTime(), event.getEndTime());
+      if (!existingEvent) {
+        newEvents.push(event); // Add event to newEvents list if it doesn't already exist
+      }
+    }
+
+    // Create new events in the target calendar
+    for (var j = 0; j < newEvents.length; j++) {
+      var newEvent = newEvents[j];
+      targetCalendar.createEvent("External Block", newEvent.getStartTime(), newEvent.getEndTime());
+    }
+  };
+
+  function findEventByTitleAndTimeslot(calendar, title, startTime, endTime) {
+    var events = calendar.getEvents(startTime, endTime);
+    for (var i = 0; i < events.length; i++) {
+      var event = events[i];
+      if (event.getTitle() === title && event.getStartTime().getTime() === startTime.getTime() && event.getEndTime().getTime() === endTime.getTime()) {
+        return event;
+      }
+    }
+    return null;
+  }
+
+  getOtherCalendarEvents(); // Call the getOtherCalendarEvents() function
+  blockAvailability(); // Call the blockAvailability() function
+}
+
+blockCalendar(); // Call the blockCalendar() function to execute it
