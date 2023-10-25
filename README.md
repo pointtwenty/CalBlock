@@ -1,5 +1,5 @@
 # CalBlock
-import calendar data to gmail - allows to show your true availability
+import from one Gmail calendar to a second gmail calendar - for people that maintain two or more google calendars
 
 The "blockCalendar" script is a Google Apps Script that helps manage calendar availability by blocking time slots in one Google Calendar based on events from another calendar. Specifically, it retrieves events from an "other calendar" and checks if those events overlap with existing events in the "target calendar." If an event with the same title and timeslot does not already exist in the target calendar, the script creates a new event to block that time slot. This script is useful for individuals or teams who want to sync and manage their availability across different calendars, ensuring that conflicting events are blocked and preventing double bookings.
 
